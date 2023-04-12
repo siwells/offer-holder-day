@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>ENU Offer Holders Day Web Lab</title>
+    <style>
+        * { 
+            padding: 0; 
+            margin: 0; 
+        } 
+        canvas { 
+            padding: 0; 
+            margin: auto; 
+            background: #eee; 
+            display: block; 
+        }
+   </style>
+</head>
+<body>
+    <canvas id="game_canvas" width="800" height="600"></canvas>
+
+    <script>
+        var canvas = document.getElementById("game_canvas");
+        var ctx = canvas.getContext("2d");
+        var ball_radius = 10;
+        var x = canvas.width-Math.floor(Math.random()*750);
+        var y = canvas.height-(Math.floor(Math.random()*200)+50);
+        var paddle_height = 10;
+        var paddle_width = 75;
+        var paddle_position = (canvas.width-paddle_width)/2;
+        var block_column_count = 9;
+        var block_row_count = 5;
+        var block_height = 20;
+        var block_width = 75;
+        var gutter = 10;
+        var padding = 30;
+        var top_margin = 20;
+        var inside_margin = 20;
+        var velocity = 4;
+        var dx = Math.random() < 0.5 ? velocity : -velocity;
+        var dy = -velocity;
+        var score = 0;
+        var lives = 1;
+        var blocks = [];
+        var colour = get_random_colour();
+
+        function get_random_colour() {
+            return '#'+Math.floor(Math.random()*16777215).toString(16);
+        }
+
+        function build_wall() {
+            for(var c=0; c<block_row_count; c++) {
+                blocks[c] = [];
+                for(var r=0; r<block_column_count; r++) {
+                    blocks[c][r] = { x: 0, y: 0, status: 1 };
+                }
+            }
+        }
+        build_wall();
+
+        function move() {
+            if(x + dx > canvas.width-ball_radius || x + dx < ball_radius) {
+                dx = -dx;
+            }
+            if(y + dy <= ball_radius) {
+                dy = -dy;
+            }
+            else if(y + dy > canvas.height-ball_radius) {
+                if(x > paddle_position && x < paddle_position + paddle_width) {
+                    dy = -dy;
+                }
+                else {
+                    lives--;
+                    if(!lives) {
+                        alert("GAME OVER");
+                        document.location.reload();
+                    }
+                    else {
+                        x = canvas.width-Math.floor(Math.random()*750+1);
+                        y = canvas.height-Math.floor(Math.random()*250+1);                    
+                        dx = Math.random() < 0.5 ? velocity : -velocity;
+                        dy = -velocity;
+                        paddle_position = (canvas.width-paddle_width)/2;
+                    }
+                }
+            }
+            x += dx;
+            y += dy;
+        }
+
+        function draw_ball() {
+            ctx.beginPath();
+            ctx.arc(x, y, ball_radius, 0, Math.PI*2);
+            ctx.fillStyle = colour;
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function draw_paddle() {
+            ctx.beginPath();
+            ctx.rect(paddle_position, canvas.height-paddle_height, paddle_width, paddle_height);
+            ctx.fillStyle = colour;
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function draw_blocks() {
+            for(var c=0; c<block_row_count; c++) {
+                for(var r=0; r<block_column_count; r++) {
+                    if(blocks[c][r].status == 1) {
+                        var blockX = (r*(block_width+gutter))+inside_margin;
+                        var blockY = (c*(block_height+gutter))+padding;
+                        blocks[c][r].x = blockX;
+                        blocks[c][r].y = blockY;
+                        ctx.beginPath();
+                        ctx.rect(blockX, blockY, block_width, block_height);
+                        ctx.fillStyle = colour;
+                        ctx.fill();
+                        ctx.closePath();
+                    }
+                }
+            }
+        }
+
+        function draw_score_text() {
+            ctx.font = "20px Arial";
+            ctx.fillStyle = colour;
+            txt  = "Score: "+score;
+            ctx.fillText(txt, inside_margin, top_margin);
+        }
+
+        function draw_lives_text() {
+            ctx.font = "20px Arial";
+            ctx.fillStyle = colour;
+            txt = "Lives: "+lives;
+            ctx.fillText(txt, canvas.width-(ctx.measureText(txt).width + inside_margin), top_margin );
+        }
+
+        
+        draw_blocks();
+        draw_ball();
+        draw_paddle();
+        draw_score_text();
+        draw_lives_text();
+
+        function game_loop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            draw_blocks();
+            draw_ball();
+            draw_paddle();
+            draw_score_text();
+            draw_lives_text();
+            move();
+            requestAnimationFrame(game_loop);
+        }
+        
+        
+        game_loop();
+    </script>
+</body>
+</html>
+

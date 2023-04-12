@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>ENU Offer Holders Day Web Lab</title>
+    <style>
+        * { 
+            padding: 0; 
+            margin: 0; 
+        } 
+        canvas { 
+            padding: 0; 
+            margin: auto; 
+            background: #eee; 
+            display: block; 
+        }
+   </style>
+</head>
+<body>
+    <canvas id="game_canvas" width="800" height="600"></canvas>
+
+    <script>
+        var canvas = document.getElementById("game_canvas");
+        var ctx = canvas.getContext("2d");
+        var ball_radius = 10;
+        var x = canvas.width-Math.floor(Math.random()*750);
+        var y = canvas.height-(Math.floor(Math.random()*200)+50);
+        var colour = get_random_colour();
+
+
+        function get_random_colour() {
+            return '#'+Math.floor(Math.random()*16777215).toString(16);
+        }
+
+        function draw_ball() {
+            ctx.beginPath();
+            ctx.arc(x, y, ball_radius, 0, Math.PI*2);
+            ctx.fillStyle = colour;
+            ctx.fill();
+            ctx.closePath();
+        }
+        draw_ball();
+    </script>
+</body>
+</html>
