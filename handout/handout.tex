@@ -237,7 +237,7 @@
 
 \subsection{Drawing}
 
-\paragraph{} The part of our game that faces the user, the interface, is the first thing we'll create. Take a look at the screenshot in Figure \cite{fig:breakout} and notice that it is built from four elements:
+\paragraph{} The part of our game that faces the user, the interface, is the first thing we'll create. Take a look at the screenshot in Figure \ref{fig:breakout} and notice that it is built from four elements:
 
 \begin{itemize}
 \item The Ball
@@ -810,7 +810,7 @@
 \paragraph{} To turn our collection of drawing functions into a rudimentary game we only need to do one thing:
 
 \begin{description}
-\item[Lines 109--117] This is where we get our code to loop over itself, to draw the world, then move the ball, then redraw the world, \emph{ad infinitum}. We've basically take all of our earierl calls to our draw functions and wrappe them in a function called game\_loop(). At the end of the game loop we call our move() function (line 146) then in line 147 we call requestAnimationFrame(), a canvas function that causes our code in the game\_loop function to be repeatedly called. At each cycle through the game loop we get a new frame of the game drawn to the screen. All of these frames give the illusion of continuous animation. This is the basis of all arcade style game interactions, basically draw the world to the screen sufficiently frequently, incorporating any updates or changes, so as to give the illusion of continuous change.
+\item[Lines 109--117] This is where we get our code to loop over itself, to draw the world, then move the ball, then redraw the world, \emph{ad infinitum}. We've basically take all of our earierl calls to our draw functions and wrappe them in a function called game\_loop(). In line 116 we call requestAnimationFrame(), a canvas function that causes our code in the game\_loop function to be repeatedly called. At each cycle through the game loop we get a new frame of the game drawn to the screen. All of these frames give the illusion of continuous animation. This is the basis of all arcade style game interactions, basically draw the world to the screen sufficiently frequently, incorporating any updates or changes, so as to give the illusion of continuous change.
 \item[Line 119] Here we call the game loop function. Once we've called it the first time it will call itself again, from within itself which will cause the drawing and move functions to be called over and over again.
 \end{description}
 
